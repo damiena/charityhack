@@ -1,0 +1,29 @@
+<%= form_for(@gife) do |f| %>
+  <% if @gife.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@gife.errors.count, "error") %> prohibited this gife from being saved:</h2>
+
+      <ul>
+      <% @gife.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :hours %><br />
+    <%= f.number_field :hours %>
+  </div>
+  <div class="field">
+    <%= f.label :charityname %><br />
+    <%= f.text_field :charityname %>
+  </div>
+  <div class="field">
+    <%= f.label :charityid %><br />
+    <%= f.number_field :charityid %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
