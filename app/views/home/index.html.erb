@@ -60,6 +60,19 @@
      }
  </script>
 
+<a href="#" onclick="sendRequest();">Send request to match my hours</a><br>
+<script>
+function sendRequest() {
+  FB.ui({
+    method: 'apprequests',
+    message: 'invites you to learn how to make your mobile web app social',
+  }, 
+  function(response) {
+    console.log('sendRequest response: ', response);
+  });
+}
+</script>
+
  <style>
   body.connected #login { display: none; }
   body.connected #logout { display: block; }
