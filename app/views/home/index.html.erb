@@ -9,8 +9,18 @@
         xfbml      : true  // parse XFBML
       });
        // Additional initialization code such as adding Event Listeners goes here
+       FB.Event.subscribe('auth.statusChange', handleStatusChange);
 
     };
+
+   function handleStatusChange(response) {
+     document.body.className = response.authResponse ? 'connected' : 'not_connected';
+
+     if (response.authResponse) {
+       console.log(response);
+     }
+   }
+
 
     // Load the SDK's source Asynchronously
   (function(d, debug){
@@ -25,5 +35,22 @@
 
 <h1>Pimp my hours</h1>
 
- <fb:login-button show-faces="true" width="200" max-rows="1" scope="publish_actions">
-  </fb:login-button>
+ <div id="login">
+   <p><button onClick="loginUser();">Login</button></p>
+ </div>
+ <div id="logout">
+   <p><button  onClick="FB.logout();">Logout</button></p>
+ </div>
+
+ <script>
+   function loginUser() {    
+     FB.login(function(response) { }, {scope:'email'});     
+     }
+ </script>
+
+ <style>
+  body.connected #login { display: none; }
+  body.connected #logout { display: block; }
+  body.not_connected #login { display: block; }
+      body.not_connected #logout { display: none; }
+</style>
