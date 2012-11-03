@@ -18,6 +18,9 @@
 
      if (response.authResponse) {
        console.log(response);
+
+	   updateUserInfo(response);
+
      }
    }
 
@@ -34,6 +37,15 @@
 
 
 <h1>Pimp my hours</h1>
+
+ <div id="user-info"></div>
+ <script>
+   function updateUserInfo(response) {
+     FB.api('/me', function(response) {
+       document.getElementById('user-info').innerHTML = '<img src="https://graph.facebook.com/' + response.id + '/picture">' + response.name;
+     });
+   }
+ </script>
 
  <div id="login">
    <p><button onClick="loginUser();">Login</button></p>
