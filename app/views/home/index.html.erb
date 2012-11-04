@@ -102,6 +102,7 @@ function DoSearch()
 </script>
 
 <div id="hint"></div>
+<h2>Find the charity you volunteered for:</h2>
 <input type="textbox" id="searchText" />
 <input type="button" value="Search" id="searchButton" onclick="DoSearch()"/>
 
@@ -110,6 +111,7 @@ function DoSearch()
 <div id="sharetime">
   <form>
     <div class='field'>
+      <br><br>
     <label for='give_hours'>How many hours did you volunteer?</label><br />
     <input id='give_hours' name='give[hours]' type='number' />
     </div>
@@ -117,7 +119,7 @@ function DoSearch()
     <input id='give_charityid' name='give[charityid]' type='hidden' />
     </div>
  </form>
-  <a href="#" onclick="publishStory();">Shout out to friends to Match Your Hours</a><br>
+  <a href="#" onclick="publishStory();" style="font-size:18px;color:blue;">Shout out to friends to Match Your Hours >></a><br>
   <script>
   function publishStory() {
     var obj = document.getElementById('give_charityid');
@@ -139,7 +141,7 @@ function DoSearch()
   }
   </script>
 
-  <a href="#" onclick="sendRequest();">Send request</a><br>
+  <a href="#" onclick="sendRequest();">Invite friends to use this app >></a><br>
   <script>
   function sendRequest() {
     FB.ui({
