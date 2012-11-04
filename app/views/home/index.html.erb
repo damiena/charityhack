@@ -42,7 +42,7 @@
  <script>
    function updateUserInfo(response) {
      FB.api('/me', function(response) {
-       document.getElementById('user-info').innerHTML = '<img src="https://graph.facebook.com/' + response.id + '/picture">' + response.name;
+       document.getElementById('user-info').innerHTML = '<img src="https://graph.facebook.com/' + response.id + '/picture">' + '<br>' + response.name;
      });
    }
  </script>
@@ -60,40 +60,108 @@
      }
  </script>
 
-<a href="#" onclick="publishStory();">Publish feed story</a><br>
-<script>
-function publishStory() {
-  FB.ui({
-    method: 'feed',
-    name: 'Match my volunteering hours.',
-    caption: 'I just volunteered, match my hours with a donation to my charity.',
-    description: 'Donate now and support more people to have the great opportunities I\'ve had',
-    link: 'http://www.justgiving.com/donation/direct/charity/2b3480a8?amount=2&reference=damien&exitUrl=http://apps.facebook.com/matchmyhours',
-    picture: 'http://www.facebookmobileweb.com/getting-started/img/facebook_icon_large.png'
-  }, 
-  function(response) {
-    console.log('publishStory response: ', response);
-  });
-  return false;
+ <script type="text/javascript">
+/ * Excuse my inline jQuery, for example purposes only! */
+
+function SelectCharity(cid, cname) {
+  
+  $('#results').html('');
+  
+  var obj = document.getElementById('sharetime');
+  obj.style.display = "block";
+
+  var obj = document.getElementById('give_charityid');
+  obj.value = "" + cid + "";
+
+
 }
+
+function DoSearch()
+{ 
+  var searchTerm = $('#searchText').val();  
+  var url = "https://api-staging.justgiving.com/9a9c05b1/v1/charity/search?q=" + encodeURIComponent(searchTerm) + "&format=json&callback=?";
+  
+  $('#hint').text("Calling: " + url);
+  
+  jQuery.getJSON(url, function(data) {
+  
+    $('#results').html("&nbsp;");
+  
+    jQuery.each(data.charitySearchResults, function(index) {
+      var dataItem = data.charitySearchResults[index]
+          
+      var newItem = "Charity Id: " + dataItem.charityId + "<br/>";
+      newItem += "Name: " + "<a href='#' onClick='SelectCharity(" + dataItem.charityId + ")'>" + dataItem.name + "</a><br/>"; 
+      newItem += "Description: " + dataItem.description + "<br/>";
+        
+      $('#results').html($('#results').html() + "<hr/>" + newItem);
+    
+      }); 
+  }); 
+}
+
 </script>
 
-<a href="#" onclick="sendRequest();">Send request</a><br>
-<script>
-function sendRequest() {
-  FB.ui({
-    method: 'apprequests',
-    message: 'invites you to match their volunteering hours with a donation',
-  }, 
-  function(response) {
-    console.log('sendRequest response: ', response);
-  });
-}
-</script>
+<div id="hint"></div>
+<input type="textbox" id="searchText" />
+<input type="button" value="Search" id="searchButton" onclick="DoSearch()"/>
+
+<div id="results"></div>
+
+<div id="sharetime">
+  <form>
+    <div class='field'>
+    <label for='give_hours'>How many hours did you volunteer?</label><br />
+    <input id='give_hours' name='give[hours]' type='number' />
+    </div>
+    <div class='field'>
+    <input id='give_charityid' name='give[charityid]' type='hidden' />
+    </div>
+ </form>
+  <a href="#" onclick="publishStory();">Publish feed story</a><br>
+  <script>
+  function publishStory() {
+    var obj = document.getElementById('give_charityid');
+    var cid = obj.value;
+    var obj = document.getElementById('give_hours');
+    var hours = obj.value;
+    FB.ui({
+      method: 'feed',
+      name: 'Match my volunteering hours.',
+      caption: 'I just volunteered, match my hours with a donation to my charity.',
+      description: 'Donate now and support more people to have the great opportunities I\'ve had',
+      link: 'http://www.justgiving.com/donation/direct/charity/' + cid + '?amount=' + hours + '&reference=damien&exitUrl=http://apps.facebook.com/matchmyhours',
+      picture: 'http://www.facebookmobileweb.com/getting-started/img/facebook_icon_large.png'
+    }, 
+    function(response) {
+      console.log('publishStory response: ', response);
+    });
+    return false;
+  }
+  </script>
+
+  <a href="#" onclick="sendRequest();">Send request</a><br>
+  <script>
+  function sendRequest() {
+    FB.ui({
+      method: 'apprequests',
+      message: 'invites you to match their volunteering hours with a donation',
+    }, 
+    function(response) {
+      console.log('sendRequest response: ', response);
+    });
+  }
+  </script>
+</div>
 
  <style>
   body.connected #login { display: none; }
   body.connected #logout { display: block; }
   body.not_connected #login { display: block; }
-      body.not_connected #logout { display: none; }
+  body.not_connected #logout { display: none; }
+  body.not_connected #searchText { display: none; }
+  body.connected #searchText { display: block; }
+  body.not_connected #searchButton { display: none; }
+  body.connected #searchButton { display: block; }
+  #sharetime {display:none;}
 </style>

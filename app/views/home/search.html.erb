@@ -1,0 +1,42 @@
+<script type="text/javascript">
+/ * Excuse my inline jQuery, for example purposes only! */
+
+function SelectCharity() {
+	
+	$('#results').html('');
+	location.replace('/')
+
+
+}
+
+function DoSearch()
+{	
+	var searchTerm = $('#searchText').val();	
+	var url = "https://api-staging.justgiving.com/9a9c05b1/v1/charity/search?q=" + encodeURIComponent(searchTerm) + "&format=json&callback=?";
+	
+	$('#hint').text("Calling: " + url);
+	
+	jQuery.getJSON(url, function(data) {
+	
+		$('#results').html("&nbsp;");
+	
+		jQuery.each(data.charitySearchResults, function(index) {
+			var dataItem = data.charitySearchResults[index]
+					
+			var newItem = "Charity Id: " + dataItem.charityId + "<br/>";
+			newItem += "Name: " + "<a href='#' onClick='SelectCharity()'>" + dataItem.name + "</a><br/>"; 
+			newItem += "Description: " + dataItem.description + "<br/>";
+				
+			$('#results').html($('#results').html() + "<hr/>" + newItem);
+		
+		  });	
+	});	
+}
+
+</script>
+
+<div id="hint"></div>
+<input type="textbox" id="searchText" />
+<input type="button" value="Search" id="searchButton" onclick="DoSearch()"/>
+
+<div id="results"></div>
